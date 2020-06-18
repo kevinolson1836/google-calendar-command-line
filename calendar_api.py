@@ -15,7 +15,7 @@ from rfc3339 import rfc3339
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
-PATH = '/home/kevin/code/projects/google-calendar-api-on-command-line/credentials.json'
+PATH = '/home/kevin/code/projects/google-calendar-command-line/credentials.json'
 HOME_WORK_CALENDAR_COLOR = "#12cad6"
 HOME_CALENDAR_COLOR = "#fa163f"
 DATE_COLOR = "#ffcd3c"
