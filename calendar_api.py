@@ -30,7 +30,8 @@ def response_from_api(calID, service, max_time, now, color):
 
     val = []
     if not events:
-        print('No upcoming events found.')
+        pass
+        # print('No upcoming events found.')
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
         val.append(start + " " + event['summary'])
@@ -71,11 +72,12 @@ def get_api_response():
     delta = datetime.timedelta(days=7)
     max_time = date.today() + timedelta(days=7)
     max_time = rfc3339(max_time)
-    response1 = response_from_api ("4tikr714t89qsjprpeijog83po@group.calendar.google.com", service, max_time, now, color="#FF6347")
-    response2 = response_from_api ("d47.org_l77q084fo5hdumaucnoqmu7ifs@group.calendar.google.com", service, max_time, now, color="#FF6347")
+    api_test_cal = response_from_api ("4tikr714t89qsjprpeijog83po@group.calendar.google.com", service, max_time, now, color="#FF6347")
+    home_cal = response_from_api ("d47.org_l77q084fo5hdumaucnoqmu7ifs@group.calendar.google.com", service, max_time, now, color="#FF6347")
+    birthdays_cal = response_from_api ("addressbook#contacts@group.v.calendar.google.com", service, max_time, now, color="#FF6347")
 
-    place_holder = [response1, response2]
-    return place_holder
+    list_of_cals = [api_test_cal, birthdays_cal, home_cal]
+    return list_of_cals
 list_of_events = []
 
 def parse_response(response):
@@ -447,4 +449,4 @@ print(f"  |                     |                     |                     |   
 print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
 print(f"  \--------------------------------------------------------------------------------------------------------------------------------------------------------/  ")
 
-print(f"\t\t\t\t\t\t COLOR CODES:\t{cs('HOME CALENDAR', HOME_CALENDAR_COLOR).bold().underline()} {cs('HOME WORK CALENDAR', HOME_WORK_CALENDAR_COLOR).bold().underline()}")
+print(f"\t\t\t\t\t\t COLOR CODES:\t{cs('HOME CALENDAR', HOME_CALENDAR_COLOR).bold().underline()} {cs('SCHOOL CALENDAR', HOME_WORK_CALENDAR_COLOR).bold().underline()}")
