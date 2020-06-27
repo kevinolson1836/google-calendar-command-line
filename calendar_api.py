@@ -47,8 +47,8 @@ def get_api_response():
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
+    if os.path.exists('/home/kevin/code/projects/google-calendar-command-line/token.pickle'):
+        with open('/home/kevin/code/projects/google-calendar-command-line/token.pickle', 'rb') as token:
             creds = pickle.load(token)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
@@ -59,26 +59,29 @@ def get_api_response():
                 PATH, SCOPES)
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
-        with open('token.pickle', 'wb') as token:
+        with open('/home/kevin/code/projects/google-calendar-command-line/token.pickle', 'wb') as token:
             pickle.dump(creds, token)
 
     service = build('calendar', 'v3', credentials=creds)
 
 
     # Call the Calendar API
-    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-
+    now = rfc3339(date.today() - timedelta(days=0))
 
     delta = datetime.timedelta(days=7)
     max_time = date.today() + timedelta(days=7)
     max_time = rfc3339(max_time)
     api_test_cal = response_from_api ("4tikr714t89qsjprpeijog83po@group.calendar.google.com", service, max_time, now, color="#FF6347")
     home_cal = response_from_api ("d47.org_l77q084fo5hdumaucnoqmu7ifs@group.calendar.google.com", service, max_time, now, color="#FF6347")
-    birthdays_cal = response_from_api ("addressbook#contacts@group.v.calendar.google.com", service, max_time, now, color="#FF6347")
+    birthdays_cal = response_from_api ("93ree9e9e3piqpimt1uiu596tg@group.calendar.google.com", service, max_time, now, color="#FF6347")
 
     list_of_cals = [api_test_cal, birthdays_cal, home_cal]
     return list_of_cals
 list_of_events = []
+
+
+ffffff = 1
+print(type(ffffff))
 
 def parse_response(response):
     color = "#FFFFFF"
@@ -87,16 +90,23 @@ def parse_response(response):
         for event in _:
             event_name = event[26:]
             event_day = event[8:10]
-            event_time = event[11:13] + ":" + event[14:16]
-            x = int(event_time[0:2])
-            if int(x) > 12:
-                event_time = int(event_time[0:2]) - 12
-                event_time = "0" + str(event_time) + ":" +event[14:16] + "PM"
-            else:
-                event_time = str(event_time) + "AM"
+            try:
+                 if int(event[11]):
+                    print("type is on int", event[11])
+                    event_time = event[11:13] + ":" + event[14:16]
+                    x = int(event_time[0:2])
+                    if int(x) > 12:
+                        event_time = int(event_time[0:2]) - 12
+                        event_time = "0" + str(event_time) + ":" +event[14:16] + "PM"
+                    else:
+                     event_time = str(event_time) + "AM"
+            except:
+                event_time = "ALL DAY"
+                event_name = event[11:]
+
             if i == 0:
                 color = HOME_WORK_CALENDAR_COLOR
-            else:
+            elif i == 1:
                 color = HOME_CALENDAR_COLOR
             list_of_events.append([event_day, event_time, event_name, color])
         i = i+1
