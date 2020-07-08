@@ -2,6 +2,7 @@ from __future__ import print_function
 from stringcolor import *
 import datetime
 import pickle
+import geocoder
 import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -10,7 +11,8 @@ import datetime
 from datetime import timedelta
 from datetime import date
 from rfc3339 import rfc3339
-
+import requests
+import json
 
 
 # If modifying these scopes, delete the file token.pickle.
@@ -20,6 +22,17 @@ HOME_WORK_CALENDAR_COLOR = "#12cad6"
 HOME_CALENDAR_COLOR = "#fa163f"
 DATE_COLOR = "#ffcd3c"
 BOARD_COLOR = "#404040"
+CRYPTO_COLOR = "#404040"
+WEATHER = "WEATHER"
+SCC_PRICE = "test value"
+CRYPTO = "CRYPTO"
+BTC_PRICE = ""
+BTC_COLOR = "#B2840C"
+ETH_PRICE = ""
+ETH_COLOR = "#B2840C"
+SCC_PRICE = ""
+SCC_COLOR = "#B2840C"
+WEATHER_COLOR = '#B2840C'
 
 def response_from_api(calID, service, max_time, now, color):
     events_result = service.events().list(calendarId=calID, timeMax=max_time, timeMin=now,
@@ -79,10 +92,6 @@ def get_api_response():
     return list_of_cals
 list_of_events = []
 
-
-ffffff = 1
-print(type(ffffff))
-
 def parse_response(response):
     color = "#FFFFFF"
     i = 0
@@ -92,7 +101,6 @@ def parse_response(response):
             event_day = event[8:10]
             try:
                  if int(event[11]):
-                    print("type is on int", event[11])
                     event_time = event[11:13] + ":" + event[14:16]
                     x = int(event_time[0:2])
                     if int(x) > 12:
@@ -114,15 +122,54 @@ def parse_response(response):
     return (list_of_events)
 
 
+def get_crypto_prices():
+
+    btc = requests.get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin&order=market_cap_desc&per_page=100&page=1&sparkline=false")
+    eth = requests.get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=ethereum&order=market_cap_desc&per_page=100&page=1&sparkline=false")
+    scc = requests.get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=stakecube&order=market_cap_desc&per_page=100&page=1&sparkline=false")
+    btc_response = btc.json()
+    eth_response = eth.json()
+    scc_response = scc.json()
+
+    btc_price = str(btc_response[0].get("current_price", ""))
+    eth_price = str(eth_response[0].get("current_price", ""))
+    scc_price = str(scc_response[0].get("current_price", ""))
+
+    return ([btc_price, eth_price, scc_price])
+
+def get_long_lat():
+    g = geocoder.ip('me')
+    return ([g.lng, g.lat])
+
 def main():
     response = get_api_response()
     parsed_response =parse_response(response)
 
 
+
+
 main()
 
+crypto_prices = get_crypto_prices()
+BTC_PRICE = "BTC: " + crypto_prices[0].ljust(10)
+ETH_PRICE = "ETH: " + crypto_prices[1].ljust(10)
+SCC_PRICE = "SCC: " + crypto_prices[2].ljust(10)
 
-space = " "
+long_lat = get_long_lat()
+lon = float(long_lat[0])
+lat = float(long_lat[1])
+req = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&%20exclude=hourly,daily&appid=1eccf9f2ce1ff09a93396d5c8013af5e"
+weather_response = requests.get(req)
+weather_response = weather_response.json()
+dump = json.dumps(weather_response, indent=4)
+temp = weather_response["hourly"][0].get("temp", "")
+feel_like = weather_response["hourly"][0].get("feels_like", "")
+weather = weather_response["hourly"][0].get("weather", "")[0].get("description", "")
+
+temp = "temp " + str(((float(json.dumps(temp, indent=4))*9)/5)-459.67 )
+feel_like = "feel like " + str(((float(json.dumps(feel_like, indent=4))*9)/5)-459.67 )
+weather = (json.dumps(weather, indent=4)).strip('"')
+
 
 day_1_time1 = " "
 day_1_time2 = " "
@@ -421,42 +468,41 @@ for each in list_of_events:
     i= i+1
 
 # day_1_time1.ljust(18)[0:18]
-
-print(f"  /--------------------------------------------------------------------------------------------------------------------------------------------------------\  ")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |    {cs(day_1, DATE_COLOR).bold().underline()}       |     {cs(day_2, DATE_COLOR).bold().underline()}      |     {cs(day_3, DATE_COLOR).bold().underline()}      |     {cs(day_4, DATE_COLOR).bold().underline()}      |     {cs(day_5, DATE_COLOR).bold().underline()}      |     {cs(day_6, DATE_COLOR).bold().underline()}      |     {cs(day_7, DATE_COLOR).bold().underline()}     |  ")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |---------------------|---------------------|---------------------|---------------------|---------------------|---------------------|--------------------|  ")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |   {cs(day_1_time1.ljust(18)[0:18], day_1_color1).bold()}|   {cs(day_2_time1.ljust(18)[0:18], day_2_color1).bold()}|   {cs(day_3_time1.ljust(18)[0:18], day_3_color1).bold()}|   {cs(day_4_time1.ljust(18)[0:18], day_4_color1).bold()}|   {cs(day_5_time1.ljust(18)[0:18], day_5_color1).bold()}|   {cs(day_6_time1.ljust(18)[0:18], day_6_color1).bold()}|   {cs(day_7_time1.ljust(18)[0:17], day_7_color1).bold()}|")
-print(f"  |   {cs(day_1_event1.ljust(18)[0:18], day_1_color1).bold()}|   {cs(day_2_event1.ljust(18)[0:18], day_2_color1).bold()}|   {cs(day_3_event1.ljust(18)[0:18], day_3_color1).bold()}|   {cs(day_4_event1.ljust(18)[0:18], day_4_color1).bold()}|   {cs(day_5_event1.ljust(18)[0:18], day_5_color1).bold()}|   {cs(day_6_event1.ljust(18)[0:18], day_6_color1).bold()}|   {cs(day_7_event1.ljust(18)[0:17], day_7_color1).bold()}|")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |   {cs(day_1_time2.ljust(18)[0:18], day_1_color2).bold()}|   {cs(day_2_time2.ljust(18)[0:18], day_2_color2).bold()}|   {cs(day_3_time2.ljust(18)[0:18], day_3_color2).bold()}|   {cs(day_4_time2.ljust(18)[0:18], day_4_color2).bold()}|   {cs(day_5_time2.ljust(18)[0:18], day_5_color2).bold()}|   {cs(day_6_time2.ljust(18)[0:18], day_6_color2).bold()}|   {cs(day_7_time2.ljust(18)[0:17], day_7_color2).bold()}|")
-print(f"  |   {cs(day_1_event2.ljust(18)[0:18], day_1_color2).bold()}|   {cs(day_2_event2.ljust(18)[0:18], day_2_color2).bold()}|   {cs(day_3_event2.ljust(18)[0:18], day_3_color2).bold()}|   {cs(day_4_event2.ljust(18)[0:18], day_4_color2).bold()}|   {cs(day_5_event2.ljust(18)[0:18], day_5_color2).bold()}|   {cs(day_6_event2.ljust(18)[0:18], day_6_color2).bold()}|   {cs(day_7_event2.ljust(18)[0:17], day_7_color2).bold()}|")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |   {cs(day_1_time3.ljust(18)[0:18], day_1_color3).bold()}|   {cs(day_2_time3.ljust(18)[0:18], day_2_color3).bold()}|   {cs(day_3_time3.ljust(18)[0:18], day_3_color3).bold()}|   {cs(day_4_time3.ljust(18)[0:18], day_4_color3).bold()}|   {cs(day_5_time3.ljust(18)[0:18], day_5_color3).bold()}|   {cs(day_6_time3.ljust(18)[0:18], day_6_color3).bold()}|   {cs(day_7_time3.ljust(18)[0:17], day_7_color3).bold()}|")
-print(f"  |   {cs(day_1_event3.ljust(18)[0:18], day_1_color3).bold()}|   {cs(day_2_event3.ljust(18)[0:18], day_2_color3).bold()}|   {cs(day_3_event3.ljust(18)[0:18], day_3_color3).bold()}|   {cs(day_4_event3.ljust(18)[0:18], day_4_color3).bold()}|   {cs(day_5_event3.ljust(18)[0:18], day_5_color3).bold()}|   {cs(day_6_event3.ljust(18)[0:18], day_6_color3).bold()}|   {cs(day_7_event3.ljust(18)[0:17], day_7_color3).bold()}|")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |   {cs(day_1_time4.ljust(18)[0:18], day_1_color4).bold()}|   {cs(day_2_time4.ljust(18)[0:18], day_2_color4).bold()}|   {cs(day_3_time4.ljust(18)[0:18], day_3_color4).bold()}|   {cs(day_4_time4.ljust(18)[0:18], day_4_color4).bold()}|   {cs(day_5_time4.ljust(18)[0:18], day_5_color4).bold()}|   {cs(day_6_time4.ljust(18)[0:18], day_6_color4).bold()}|   {cs(day_7_time4.ljust(18)[0:17], day_7_color4).bold()}|")
-print(f"  |   {cs(day_1_event4.ljust(18)[0:18], day_1_color4).bold()}|   {cs(day_2_event4.ljust(18)[0:18], day_2_color4).bold()}|   {cs(day_3_event4.ljust(18)[0:18], day_3_color4).bold()}|   {cs(day_4_event4.ljust(18)[0:18], day_4_color4).bold()}|   {cs(day_5_event4.ljust(18)[0:18], day_5_color4).bold()}|   {cs(day_6_event4.ljust(18)[0:18], day_6_color4).bold()}|   {cs(day_7_event4.ljust(18)[0:17], day_7_color4).bold()}|")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |   {cs(day_1_time5.ljust(18)[0:18], day_1_color5).bold()}|   {cs(day_2_time5.ljust(18)[0:18], day_2_color5).bold()}|   {cs(day_3_time5.ljust(18)[0:18], day_3_color5).bold()}|   {cs(day_4_time5.ljust(18)[0:18], day_4_color5).bold()}|   {cs(day_5_time5.ljust(18)[0:18], day_5_color5).bold()}|   {cs(day_6_time5.ljust(18)[0:18], day_6_color5).bold()}|   {cs(day_7_time5.ljust(18)[0:17], day_7_color5).bold()}|")
-print(f"  |   {cs(day_1_event5.ljust(18)[0:18], day_1_color5).bold()}|   {cs(day_2_event5.ljust(18)[0:18], day_2_color5).bold()}|   {cs(day_3_event5.ljust(18)[0:18], day_3_color5).bold()}|   {cs(day_4_event5.ljust(18)[0:18], day_4_color5).bold()}|   {cs(day_5_event5.ljust(18)[0:18], day_5_color5).bold()}|   {cs(day_6_event5.ljust(18)[0:18], day_6_color5).bold()}|   {cs(day_7_event5.ljust(18)[0:17], day_7_color5).bold()}|")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  |                     |                     |                     |                     |                     |                     |                    |  ")
-print(f"  \--------------------------------------------------------------------------------------------------------------------------------------------------------/  ")
+print(f"  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|")
+print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
+print(f"  |    {cs(day_1, DATE_COLOR).bold().underline()}       |     {cs(day_2, DATE_COLOR).bold().underline()}      |     {cs(day_3, DATE_COLOR).bold().underline()}      |     {cs(day_4, DATE_COLOR).bold().underline()}      |     {cs(day_5, DATE_COLOR).bold().underline()}      |    {cs(day_6, DATE_COLOR).bold().underline()}       |     {cs(day_7, DATE_COLOR).bold().underline()}     |     {cs(WEATHER, DATE_COLOR).bold().underline()}    |")
+print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
+print(f"  |---------------------|---------------------|---------------------|---------------------|---------------------|---------------------|--------------------| {cs(temp.ljust(18)[0:9], WEATHER_COLOR).bold()}      |")
+print(f"  |                     |                     |                     |                     |                     |                     |                    | {cs(feel_like.ljust(18)[0:14], WEATHER_COLOR).bold()} |")
+print(f"  |   {cs(day_1_time1.ljust(18)[0:18], day_1_color1).bold()}|   {cs(day_2_time1.ljust(18)[0:18], day_2_color1).bold()}|   {cs(day_3_time1.ljust(18)[0:18], day_3_color1).bold()}|   {cs(day_4_time1.ljust(18)[0:18], day_4_color1).bold()}|   {cs(day_5_time1.ljust(18)[0:18], day_5_color1).bold()}|   {cs(day_6_time1.ljust(18)[0:18], day_6_color1).bold()}|   {cs(day_7_time1.ljust(18)[0:17], day_7_color1).bold()}| {cs(weather.ljust(18)[0:15], WEATHER_COLOR).bold()}|")
+print(f"  |   {cs(day_1_event1.ljust(18)[0:18], day_1_color1).bold()}|   {cs(day_2_event1.ljust(18)[0:18], day_2_color1).bold()}|   {cs(day_3_event1.ljust(18)[0:18], day_3_color1).bold()}|   {cs(day_4_event1.ljust(18)[0:18], day_4_color1).bold()}|   {cs(day_5_event1.ljust(18)[0:18], day_5_color1).bold()}|   {cs(day_6_event1.ljust(18)[0:18], day_6_color1).bold()}|   {cs(day_7_event1.ljust(18)[0:17], day_7_color1).bold()}|                |")
+print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
+print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
+print(f"  |                     |                     |                     |                     |                     |                     |                    |----------------|")
+print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
+print(f"  |   {cs(day_1_time2.ljust(18)[0:18], day_1_color2).bold()}|   {cs(day_2_time2.ljust(18)[0:18], day_2_color2).bold()}|   {cs(day_3_time2.ljust(18)[0:18], day_3_color2).bold()}|   {cs(day_4_time2.ljust(18)[0:18], day_4_color2).bold()}|   {cs(day_5_time2.ljust(18)[0:18], day_5_color2).bold()}|   {cs(day_6_time2.ljust(18)[0:18], day_6_color2).bold()}|   {cs(day_7_time2.ljust(18)[0:17], day_7_color2).bold()}|     {cs(CRYPTO, CRYPTO_COLOR).bold().underline()}     |")
+print(f"  |   {cs(day_1_event2.ljust(18)[0:18], day_1_color2).bold()}|   {cs(day_2_event2.ljust(18)[0:18], day_2_color2).bold()}|   {cs(day_3_event2.ljust(18)[0:18], day_3_color2).bold()}|   {cs(day_4_event2.ljust(18)[0:18], day_4_color2).bold()}|   {cs(day_5_event2.ljust(18)[0:18], day_5_color2).bold()}|   {cs(day_6_event2.ljust(18)[0:18], day_6_color2).bold()}|   {cs(day_7_event2.ljust(18)[0:17], day_7_color2).bold()}|                |")
+print(f"  |                     |                     |                     |                     |                     |                     |                    | {cs(BTC_PRICE, BTC_COLOR).bold()}|")
+print(f"  |                     |                     |                     |                     |                     |                     |                    | {cs(ETH_PRICE, ETH_COLOR).bold()}|")
+print(f"  |                     |                     |                     |                     |                     |                     |                    | {cs(SCC_PRICE, SCC_COLOR).bold()}|")
+print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
+print(f"  |   {cs(day_1_time3.ljust(18)[0:18], day_1_color3).bold()}|   {cs(day_2_time3.ljust(18)[0:18], day_2_color3).bold()}|   {cs(day_3_time3.ljust(18)[0:18], day_3_color3).bold()}|   {cs(day_4_time3.ljust(18)[0:18], day_4_color3).bold()}|   {cs(day_5_time3.ljust(18)[0:18], day_5_color3).bold()}|   {cs(day_6_time3.ljust(18)[0:18], day_6_color3).bold()}|   {cs(day_7_time3.ljust(18)[0:17], day_7_color3).bold()}|----------------|")
+print(f"  |   {cs(day_1_event3.ljust(18)[0:18], day_1_color3).bold()}|   {cs(day_2_event3.ljust(18)[0:18], day_2_color3).bold()}|   {cs(day_3_event3.ljust(18)[0:18], day_3_color3).bold()}|   {cs(day_4_event3.ljust(18)[0:18], day_4_color3).bold()}|   {cs(day_5_event3.ljust(18)[0:18], day_5_color3).bold()}|   {cs(day_6_event3.ljust(18)[0:18], day_6_color3).bold()}|   {cs(day_7_event3.ljust(18)[0:17], day_7_color3).bold()}|                |")
+print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
+print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
+print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
+print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
+print(f"  |   {cs(day_1_time4.ljust(18)[0:18], day_1_color4).bold()}|   {cs(day_2_time4.ljust(18)[0:18], day_2_color4).bold()}|   {cs(day_3_time4.ljust(18)[0:18], day_3_color4).bold()}|   {cs(day_4_time4.ljust(18)[0:18], day_4_color4).bold()}|   {cs(day_5_time4.ljust(18)[0:18], day_5_color4).bold()}|   {cs(day_6_time4.ljust(18)[0:18], day_6_color4).bold()}|   {cs(day_7_time4.ljust(18)[0:17], day_7_color4).bold()}|                |")
+print(f"  |   {cs(day_1_event4.ljust(18)[0:18], day_1_color4).bold()}|   {cs(day_2_event4.ljust(18)[0:18], day_2_color4).bold()}|   {cs(day_3_event4.ljust(18)[0:18], day_3_color4).bold()}|   {cs(day_4_event4.ljust(18)[0:18], day_4_color4).bold()}|   {cs(day_5_event4.ljust(18)[0:18], day_5_color4).bold()}|   {cs(day_6_event4.ljust(18)[0:18], day_6_color4).bold()}|   {cs(day_7_event4.ljust(18)[0:17], day_7_color4).bold()}|                |")
+print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
+print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
+print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
+print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
+print(f"  |   {cs(day_1_time5.ljust(18)[0:18], day_1_color5).bold()}|   {cs(day_2_time5.ljust(18)[0:18], day_2_color5).bold()}|   {cs(day_3_time5.ljust(18)[0:18], day_3_color5).bold()}|   {cs(day_4_time5.ljust(18)[0:18], day_4_color5).bold()}|   {cs(day_5_time5.ljust(18)[0:18], day_5_color5).bold()}|   {cs(day_6_time5.ljust(18)[0:18], day_6_color5).bold()}|   {cs(day_7_time5.ljust(18)[0:17], day_7_color5).bold()}|                |")
+print(f"  |   {cs(day_1_event5.ljust(18)[0:18], day_1_color5).bold()}|   {cs(day_2_event5.ljust(18)[0:18], day_2_color5).bold()}|   {cs(day_3_event5.ljust(18)[0:18], day_3_color5).bold()}|   {cs(day_4_event5.ljust(18)[0:18], day_4_color5).bold()}|   {cs(day_5_event5.ljust(18)[0:18], day_5_color5).bold()}|   {cs(day_6_event5.ljust(18)[0:18], day_6_color5).bold()}|   {cs(day_7_event5.ljust(18)[0:17], day_7_color5).bold()}|                |")
+print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
+print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
+print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
+print(f"  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|")
 
 print(f"\t\t\t\t\t\t COLOR CODES:\t{cs('HOME CALENDAR', HOME_CALENDAR_COLOR).bold().underline()} {cs('SCHOOL CALENDAR', HOME_WORK_CALENDAR_COLOR).bold().underline()}")
