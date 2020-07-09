@@ -13,7 +13,7 @@ from datetime import date
 from rfc3339 import rfc3339
 import requests
 import json
-
+import pdb
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
@@ -99,19 +99,18 @@ def parse_response(response):
         for event in _:
             event_name = event[26:]
             event_day = event[8:10]
-            try:
-                 if int(event[11]):
-                    event_time = event[11:13] + ":" + event[14:16]
-                    x = int(event_time[0:2])
-                    if int(x) > 12:
-                        event_time = int(event_time[0:2]) - 12
-                        event_time = "0" + str(event_time) + ":" +event[14:16] + "PM"
-                    else:
-                     event_time = str(event_time) + "AM"
-            except:
+            # pdb.set_trace()
+            if event[10] != " ":
+                event_time = event[11:13] + ":" + event[14:16]
+                x = int(event_time[0:2])
+                if x > 12:
+                    event_time = int(event_time[0:2]) - 12
+                    event_time = "0" + str(event_time) + ":" +event[14:16] + "PM"
+                else:
+                    event_time = str(event_time) + "AM"
+            else:
                 event_time = "ALL DAY"
                 event_name = event[11:]
-
             if i == 0:
                 color = HOME_WORK_CALENDAR_COLOR
             elif i == 1:
@@ -143,7 +142,7 @@ def get_long_lat():
 
 def main():
     response = get_api_response()
-    parsed_response =parse_response(response)
+    parsed_response = parse_response(response)
 
 
 
@@ -158,13 +157,13 @@ SCC_PRICE = "SCC: " + crypto_prices[2].ljust(10)
 long_lat = get_long_lat()
 lon = float(long_lat[0])
 lat = float(long_lat[1])
-req = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&%20exclude=hourly,daily&appid=1eccf9f2ce1ff09a93396d5c8013af5e"
+req = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&%20exclude=minutely,hourly,daily&appid=1eccf9f2ce1ff09a93396d5c8013af5e"
 weather_response = requests.get(req)
 weather_response = weather_response.json()
 dump = json.dumps(weather_response, indent=4)
-temp = weather_response["hourly"][0].get("temp", "")
-feel_like = weather_response["hourly"][0].get("feels_like", "")
-weather = weather_response["hourly"][0].get("weather", "")[0].get("description", "")
+temp = weather_response["current"].get("temp", "")
+feel_like = weather_response["current"].get("feels_like", "")
+weather = weather_response["current"].get("weather", "")[0].get("description", "")
 
 temp = "temp " + str(((float(json.dumps(temp, indent=4))*9)/5)-459.67 )
 feel_like = "feel like " + str(((float(json.dumps(feel_like, indent=4))*9)/5)-459.67 )
@@ -467,7 +466,6 @@ for each in list_of_events:
         day_7_count = day_7_count+1
     i= i+1
 
-# day_1_time1.ljust(18)[0:18]
 print(f"  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|")
 print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
 print(f"  |    {cs(day_1, DATE_COLOR).bold().underline()}       |     {cs(day_2, DATE_COLOR).bold().underline()}      |     {cs(day_3, DATE_COLOR).bold().underline()}      |     {cs(day_4, DATE_COLOR).bold().underline()}      |     {cs(day_5, DATE_COLOR).bold().underline()}      |    {cs(day_6, DATE_COLOR).bold().underline()}       |     {cs(day_7, DATE_COLOR).bold().underline()}     |     {cs(WEATHER, DATE_COLOR).bold().underline()}    |")
@@ -498,7 +496,7 @@ print(f"  |                     |                     |                     |   
 print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
 print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
 print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
-print(f"  |   {cs(day_1_time5.ljust(18)[0:18], day_1_color5).bold()}|   {cs(day_2_time5.ljust(18)[0:18], day_2_color5).bold()}|   {cs(day_3_time5.ljust(18)[0:18], day_3_color5).bold()}|   {cs(day_4_time5.ljust(18)[0:18], day_4_color5).bold()}|   {cs(day_5_time5.ljust(18)[0:18], day_5_color5).bold()}|   {cs(day_6_time5.ljust(18)[0:18], day_6_color5).bold()}|   {cs(day_7_time5.ljust(18)[0:17], day_7_color5).bold()}|                |")
+print(f"  |   {cs(day_1_time5.ljust(18)[0:18], day_1_color5).bold()}|   {cs(day_2_time5.ljust(18)[0:18], day_2_color5).bold()}|   {cs(day_3_time5.ljust(18)[0:18], day_3_color5).bold()}|   {cs(day_4_time5.ljust(18)[0:18], day_4_color5).bold()}|   {cs(day_5_time5.ljust(18)[0:18], day_5_color5).bold()}|   {cs(day_6_time5.ljust(18)[0:18], day_6_color5).bold()}|   {cs(day_7_time5.ljust(18)[0:17], day_7_color5).bold()}|  new emails?   |")
 print(f"  |   {cs(day_1_event5.ljust(18)[0:18], day_1_color5).bold()}|   {cs(day_2_event5.ljust(18)[0:18], day_2_color5).bold()}|   {cs(day_3_event5.ljust(18)[0:18], day_3_color5).bold()}|   {cs(day_4_event5.ljust(18)[0:18], day_4_color5).bold()}|   {cs(day_5_event5.ljust(18)[0:18], day_5_color5).bold()}|   {cs(day_6_event5.ljust(18)[0:18], day_6_color5).bold()}|   {cs(day_7_event5.ljust(18)[0:17], day_7_color5).bold()}|                |")
 print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
 print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
