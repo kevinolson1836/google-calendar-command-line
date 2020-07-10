@@ -18,8 +18,11 @@ import pdb
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 PATH = '/home/kevin/code/projects/google-calendar-command-line/credentials.json'
-HOME_WORK_CALENDAR_COLOR = "#12cad6"
+HOME_WORK_CALENDAR_COLOR = "#FF0000"
+CLASSES_CALENDAR_COLOR = "#FFFFFF"
+BIRTHDAY_CALENDAR_COLOR = "#00FF00"
 HOME_CALENDAR_COLOR = "#fa163f"
+HOLIDAY_CALENDAR_COLOR = "#FFC0CB"
 DATE_COLOR = "#ffcd3c"
 BOARD_COLOR = "#404040"
 CRYPTO_COLOR = "#404040"
@@ -33,6 +36,18 @@ ETH_COLOR = "#B2840C"
 SCC_PRICE = ""
 SCC_COLOR = "#B2840C"
 WEATHER_COLOR = '#B2840C'
+list_of_events = []
+
+class Calendar:
+    def __init__(self, response, color):
+        self.response = response
+        self.color = color
+
+    def get_response(self):
+        return self.response
+
+    def get_color(self):
+        return self.color
 
 def response_from_api(calID, service, max_time, now, color):
     events_result = service.events().list(calendarId=calID, timeMax=max_time, timeMin=now,
@@ -77,47 +92,50 @@ def get_api_response():
 
     service = build('calendar', 'v3', credentials=creds)
 
-
     # Call the Calendar API
     now = rfc3339(date.today() - timedelta(days=0))
-
     delta = datetime.timedelta(days=7)
     max_time = date.today() + timedelta(days=7)
     max_time = rfc3339(max_time)
-    api_test_cal = response_from_api ("4tikr714t89qsjprpeijog83po@group.calendar.google.com", service, max_time, now, color="#FF6347")
-    home_cal = response_from_api ("d47.org_l77q084fo5hdumaucnoqmu7ifs@group.calendar.google.com", service, max_time, now, color="#FF6347")
-    birthdays_cal = response_from_api ("93ree9e9e3piqpimt1uiu596tg@group.calendar.google.com", service, max_time, now, color="#FF6347")
-
-    list_of_cals = [api_test_cal, birthdays_cal, home_cal]
+    classes = Calendar (response_from_api ("4tikr714t89qsjprpeijog83po@group.calendar.google.com", service, max_time, now, color="#FF6347"), color=CLASSES_CALENDAR_COLOR)
+    home_cal = Calendar (response_from_api ("d47.org_l77q084fo5hdumaucnoqmu7ifs@group.calendar.google.com", service, max_time, now, color="#FF6347"), color=HOME_CALENDAR_COLOR)
+    birthdays_cal = Calendar (response_from_api ("93ree9e9e3piqpimt1uiu596tg@group.calendar.google.com", service, max_time, now, color="#FF6347"), color = BIRTHDAY_CALENDAR_COLOR)
+    holiday_cal = Calendar (response_from_api ("en.usa#holiday@group.v.calendar.google.com", service, max_time, now, color="#FF6347"), color = HOLIDAY_CALENDAR_COLOR)
+    home_work_cal = Calendar (response_from_api ("jd68d64fb2t5jr453apkuvkkcs@group.calendar.google.com", service, max_time, now, color="#FF6347"), color = HOME_WORK_CALENDAR_COLOR)
+    list_of_cals = [birthdays_cal, home_work_cal, classes, home_cal, holiday_cal]
     return list_of_cals
-list_of_events = []
 
 def parse_response(response):
-    color = "#FFFFFF"
-    i = 0
+    color = "#aaaaaa"
+    i = -1
     for _ in response:
-        for event in _:
-            event_name = event[26:]
-            event_day = event[8:10]
-            # pdb.set_trace()
-            if event[10] != " ":
-                event_time = event[11:13] + ":" + event[14:16]
-                x = int(event_time[0:2])
-                if x > 12:
-                    event_time = int(event_time[0:2]) - 12
-                    event_time = "0" + str(event_time) + ":" +event[14:16] + "PM"
+        i = i + 1
+        event = _.get_response()
+        if not event:
+            # print("response is empty")
+            pass
+        else:
+            for event in event:
+                # print(event)
+                event_name = event[26:]
+                event_day = event[8:10]
+                # print(event_name)
+                # print(event_day)
+                # pdb.set_trace()
+                if event[10] != " ":
+                    event_time = str(event[11:13]) + ":" + str(event[14:16])
+                    # print(event_time)
+                    x = int(event_time[0:2])
+                    if x > 12:
+                        event_time = int(event_time[0:2]) - 12
+                        event_time = "0" + str(event_time) + ":" + str(event[14:16]) + "PM"
+                    else:
+                        event_time = str(event_time) + "AM"
                 else:
-                    event_time = str(event_time) + "AM"
-            else:
-                event_time = "ALL DAY"
-                event_name = event[11:]
-            if i == 0:
-                color = HOME_WORK_CALENDAR_COLOR
-            elif i == 1:
-                color = HOME_CALENDAR_COLOR
-            list_of_events.append([event_day, event_time, event_name, color])
-        i = i+1
-
+                    event_time = "ALL DAY"
+                    event_name = event[11:]
+                color = _.get_color()
+                list_of_events.append([event_day, event_time, event_name, color])
     return (list_of_events)
 
 
@@ -140,10 +158,15 @@ def get_long_lat():
     g = geocoder.ip('me')
     return ([g.lng, g.lat])
 
+def get_email():
+    # does not work right now
+    print(requests.get("https://outlook.office.com/api/v2.0/me/MailFolders/Inbox/messages"))
+
+
 def main():
     response = get_api_response()
     parsed_response = parse_response(response)
-
+    # get_email()
 
 
 
@@ -503,4 +526,4 @@ print(f"  |                     |                     |                     |   
 print(f"  |                     |                     |                     |                     |                     |                     |                    |                |")
 print(f"  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|")
 
-print(f"\t\t\t\t\t\t COLOR CODES:\t{cs('HOME CALENDAR', HOME_CALENDAR_COLOR).bold().underline()} {cs('SCHOOL CALENDAR', HOME_WORK_CALENDAR_COLOR).bold().underline()}")
+print(f"\t\t\t\t\t\t COLOR CODES:\t{cs('HOME', HOME_CALENDAR_COLOR).bold().underline()} {cs('HOMEWORK', HOME_WORK_CALENDAR_COLOR).bold().underline()} {cs('BIRTHDAY', BIRTHDAY_CALENDAR_COLOR).bold().underline()} {cs('CLASSES', CLASSES_CALENDAR_COLOR).bold().underline()} {cs('HOLIDAY CALENDAR', HOLIDAY_CALENDAR_COLOR).bold().underline()}")
