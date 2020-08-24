@@ -105,9 +105,50 @@ def get_api_response():
     home_cal = Calendar (response_from_api ("d47.org_l77q084fo5hdumaucnoqmu7ifs@group.calendar.google.com", service, max_time, now, color="#FF6347"), color=HOME_CALENDAR_COLOR)
     birthdays_cal = Calendar (response_from_api ("93ree9e9e3piqpimt1uiu596tg@group.calendar.google.com", service, max_time, now, color="#FF6347"), color = BIRTHDAY_CALENDAR_COLOR)
     holiday_cal = Calendar (response_from_api ("en.usa#holiday@group.v.calendar.google.com", service, max_time, now, color="#FF6347"), color = HOLIDAY_CALENDAR_COLOR)
-    home_work_cal = Calendar (response_from_api ("jd68d64fb2t5jr453apkuvkkcs@group.calendar.google.com", service, max_time, now, color="#FF6347"), color = HOME_WORK_CALENDAR_COLOR)
-    list_of_cals = [birthdays_cal, home_work_cal, classes, home_cal, holiday_cal]
+    list_of_cals = [birthdays_cal, classes, home_cal, holiday_cal]
     return(list_of_cals)
+
+def get_homework_response():
+    """Shows basic usage of the Google Calendar API.
+    Prints the start and name of the next 10 events on the user's calendar.
+    """
+    creds = None
+    # The file token.pickle stores the user's access and refresh tokens, and is
+    # created automatically when the authorization flow completes for the first
+    # time.
+    if os.path.exists('/home/kevin/code/projects/google-calendar-command-line/token.pickle'):
+        with open('/home/kevin/code/projects/google-calendar-command-line/token.pickle', 'rb') as token:
+            creds = pickle.load(token)
+    # If there are no (valid) credentials available, let the user log in.
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                PATH, SCOPES)
+            creds = flow.run_local_server(port=0)
+        # Save the credentials for the next run
+        with open('/home/kevin/code/projects/google-calendar-command-line/token.pickle', 'wb') as token:
+            pickle.dump(creds, token)
+
+    service = build('calendar', 'v3', credentials=creds)
+
+    # Call the Calendar API
+    now = rfc3339(date.today() - timedelta(days=0))
+    delta = datetime.timedelta(days=7)
+    max_time = date.today() + timedelta(days=7)
+    max_time = rfc3339(max_time)
+    home_work_cal = Calendar (response_from_api ("jd68d64fb2t5jr453apkuvkkcs@group.calendar.google.com", service, max_time, now, color="#FF6347"), color = HOME_WORK_CALENDAR_COLOR)
+    event = home_work_cal.get_response()
+    return_list =[]
+    i = 0
+    for each in range(12):
+        if i >= len(event):
+            return_list.append("")
+        else:
+            return_list.append(event[i])
+        i = i+1
+    return(return_list)
 
 def parse_response(response):
     color = "#aaaaaa"
@@ -116,16 +157,12 @@ def parse_response(response):
         i = i + 1
         event = _.get_response()
         if not event:
-            # print("response is empty")
             pass
         else:
             for event in event:
-                # print(event)
                 event_name = event[26:]
                 event_day = event[8:10]
-                # print(event_name)
-                # print(event_day)
-                # pdb.set_trace()
+
                 if event[10] != " ":
                     event_time = str(event[11:13]) + ":" + str(event[14:16])
                     # print(event_time)
@@ -140,66 +177,17 @@ def parse_response(response):
                     event_name = event[11:]
                 color = _.get_color()
                 list_of_events.append([event_day, event_time, event_name, color])
+                # print(list_of_events)
     return (list_of_events)
-
-
-def get_crypto_prices():
-
-    btc = requests.get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin&order=market_cap_desc&per_page=100&page=1&sparkline=false")
-    eth = requests.get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=ethereum&order=market_cap_desc&per_page=100&page=1&sparkline=false")
-    scc = requests.get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=stakecube&order=market_cap_desc&per_page=100&page=1&sparkline=false")
-    btc_response = btc.json()
-    eth_response = eth.json()
-    scc_response = scc.json()
-
-    btc_price = str(btc_response[0].get("current_price", ""))
-    eth_price = str(eth_response[0].get("current_price", ""))
-    scc_price = str(scc_response[0].get("current_price", ""))
-
-    return ([btc_price, eth_price, scc_price])
-
-def get_long_lat():
-    g = geocoder.ip('me')
-    return ([g.lng, g.lat])
-
-def get_task():
-    return requests.get('https://www.googleapis.com/tasks/v1/users/@me/').json()
-
-def get_email():
-    # does not work right now
-    print(requests.get("https://outlook.office.com/api/v2.0/me/MailFolders/Inbox/messages"))
 
 
 def main():
     response = get_api_response()
     parsed_response = parse_response(response)
-    # get_email()
-    # print(get_task())
 
 
 
 main()
-
-crypto_prices = get_crypto_prices()
-BTC_PRICE = "BTC: " + crypto_prices[0].ljust(10)
-ETH_PRICE = "ETH: " + crypto_prices[1].ljust(10)
-SCC_PRICE = "SCC: " + crypto_prices[2].ljust(10)
-
-long_lat = get_long_lat()
-lon = float(long_lat[0])
-lat = float(long_lat[1])
-req = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&%20exclude=minutely,hourly,daily&appid=1eccf9f2ce1ff09a93396d5c8013af5e"
-weather_response = requests.get(req)
-weather_response = weather_response.json()
-dump = json.dumps(weather_response, indent=4)
-temp = weather_response["current"].get("temp", "")
-feel_like = weather_response["current"].get("feels_like", "")
-weather = weather_response["current"].get("weather", "")[0].get("description", "")
-
-temp = "temp " + str(((float(json.dumps(temp, indent=4))*9)/5)-459.67 )
-feel_like = "feel like " + str(((float(json.dumps(feel_like, indent=4))*9)/5)-459.67 )
-weather = (json.dumps(weather, indent=4)).strip('"')
-
 
 day_1_time1 = " "
 day_1_time2 = " "
@@ -265,7 +253,7 @@ day_4_time5 = " "
 day_4_event5 = " "
 day_4_color5 = "#FFFFFF"
 
-day_5_time1 = " "
+day_5_time1 = "day_5_time1"
 day_5_event1 = " "
 day_5_color1 = "#FFFFFF"
 day_5_time2 = " "
@@ -348,6 +336,7 @@ day_4_count = 1
 day_5_count = 1
 day_6_count = 1
 day_7_count = 1
+print("this is list_of_events:", list_of_events)
 for each in list_of_events:
     if day_1_num == list_of_events[i][0]:
         if day_1_count == 1:
@@ -440,7 +429,9 @@ for each in list_of_events:
             day_4_color5 = list_of_events[i][3]
         day_4_count = day_4_count+1
     if day_5_num == list_of_events[i][0]:
-        if day_1_count == 1:
+        print("day5 count: ",day_5_count)
+        print("this is list_of_events[i][2]: ",list_of_events[i][2])
+        if day_5_count == 1:
             day_5_time1 = list_of_events[i][1]
             day_5_event1 = list_of_events[i][2]
             day_5_color1 = list_of_events[i][3]
@@ -504,14 +495,6 @@ for each in list_of_events:
             day_7_time5 = list_of_events[i][1]
             day_7_event5 = list_of_events[i][2]
             day_7_color5 = list_of_events[i][3]
-            print(day_7_color5)
-            print(day_7_color5)
-            print(day_7_color5)
-            print(day_7_color5)
-            print(day_7_color5)
-            print(day_7_color5)
-            print(day_7_color5)
-            print(day_7_color5)
         day_7_count = day_7_count+1
     i= i+1
 
@@ -538,11 +521,13 @@ colors = [
     [day_1_color4,day_2_color4, day_3_color4, day_4_color4, day_5_color4, day_6_color4, day_7_color4],
     [day_1_color5,day_2_color5, day_3_color5, day_4_color5, day_5_color5, day_6_color5, day_7_color5]
 ]
+
     
+hw = get_homework_response()
 
 # times = make_calendar_vars(list_of_events)
-# print(f"\n\nthis is events: {events}\n\n\n this is times: {times}\n\n\n this is dates: {dates}\n\n\n this is colors: {colors}\n\n\nn")
-dc.print_calendar(times, events, dates, colors)
+print(f"\n\nthis is list_of_events: {list_of_events} \n\n\n\nthis is events: {events}\n\n\n this is times: {times}\n\n\n this is dates: {dates}\n\n\n this is colors: {colors}\n\n\nthis is homework: {hw}")
+dc.print_calendar(times, events, dates, colors, hw)
 x = os.get_terminal_size()
 columns = int(x[0])
 columns_half = columns/2
