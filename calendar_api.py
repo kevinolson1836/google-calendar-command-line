@@ -204,6 +204,15 @@ day_1_color4 = "#FFFFFF"
 day_1_time5 = " "
 day_1_event5 = " "
 day_1_color5 = "#FFFFFF"
+day_1_time6 = " "
+day_1_event6 = " "
+day_1_color6 = "#FFFFFF"
+day_1_time7 = " "
+day_1_event7 = " "
+day_1_color7 = "#FFFFFF"
+day_1_time8 = " "
+day_1_event8 = " "
+day_1_color8 = "#FFFFFF"
 
 day_2_time1 = " "
 day_2_event1 = " "
@@ -220,6 +229,15 @@ day_2_color4 = "#FFFFFF"
 day_2_time5 = " "
 day_2_event5 = " "
 day_2_color5 = "#FFFFFF"
+day_2_time6 = " "
+day_2_event6 = " "
+day_2_color6 = "#FFFFFF"
+day_2_time7 = " "
+day_2_event7 = " "
+day_2_color7 = "#FFFFFF"
+day_2_time8 = " "
+day_2_event8 = " "
+day_2_color8 = "#FFFFFF"
 
 day_3_time1 = " "
 day_3_event1 = " "
@@ -236,6 +254,16 @@ day_3_color4 = "#FFFFFF"
 day_3_time5 = " "
 day_3_event5 = " "
 day_3_color5 = "#FFFFFF"
+day_3_time6 = " "
+day_3_event6 = " "
+day_3_color6 = "#FFFFFF"
+day_3_time7 = " "
+day_3_event7 = " "
+day_3_color7 = "#FFFFFF"
+day_3_time8 = " "
+day_3_event8 = " "
+day_3_color8 = "#FFFFFF"
+
 
 day_4_time1 = " "
 day_4_event1 = " "
@@ -252,6 +280,16 @@ day_4_color4 = "#FFFFFF"
 day_4_time5 = " "
 day_4_event5 = " "
 day_4_color5 = "#FFFFFF"
+day_4_time6 = " "
+day_4_event6 = " "
+day_4_color6 = "#FFFFFF"
+day_4_time7 = " "
+day_4_event7 = " "
+day_4_color7 = "#FFFFFF"
+day_4_time8 = " "
+day_4_event8 = " "
+day_4_color8 = "#FFFFFF"
+
 
 day_5_time1 = "day_5_time1"
 day_5_event1 = " "
@@ -268,6 +306,16 @@ day_5_color4 = "#FFFFFF"
 day_5_time5 = " "
 day_5_event5 = " "
 day_5_color5 = "#FFFFFF"
+day_5_time6 = " "
+day_5_event6 = " "
+day_5_color6 = "#FFFFFF"
+day_5_time7 = " "
+day_5_event7 = " "
+day_5_color7 = "#FFFFFF"
+day_5_time8 = " "
+day_5_event8 = " "
+day_5_color8 = "#FFFFFF"
+
 
 day_6_time1 = " "
 day_6_event1 = " "
@@ -284,6 +332,15 @@ day_6_color4 = "#FFFFFF"
 day_6_time5 = " "
 day_6_event5 = " "
 day_6_color5 = "#FFFFFF"
+day_6_time6 = " "
+day_6_event6 = " "
+day_6_color6 = "#FFFFFF"
+day_6_time7 = " "
+day_6_event7 = " "
+day_6_color7 = "#FFFFFF"
+day_6_time8 = " "
+day_6_event8 = " "
+day_6_color8 = "#FFFFFF"
 
 day_7_time1 = " "
 day_7_event1 = " "
@@ -300,6 +357,15 @@ day_7_color4 = "#FFFFFF"
 day_7_time5 = " "
 day_7_event5 = " "
 day_7_color5 = "#FFFFFF"
+day_7_time6 = " "
+day_7_event6 = " "
+day_7_color6 = "#FFFFFF"
+day_7_time7 = " "
+day_7_event7 = " "
+day_7_color7 = "#FFFFFF"
+day_7_time8 = " "
+day_7_event8 = " "
+day_7_color8 = "#FFFFFF"
 
 
 day_1 = (date.today()).__format__("%b-%a-%d")
@@ -336,7 +402,6 @@ day_4_count = 1
 day_5_count = 1
 day_6_count = 1
 day_7_count = 1
-print("this is list_of_events:", list_of_events)
 for each in list_of_events:
     if day_1_num == list_of_events[i][0]:
         if day_1_count == 1:
@@ -359,6 +424,18 @@ for each in list_of_events:
             day_1_time5 = list_of_events[i][1]
             day_1_event5 = list_of_events[i][2]
             day_1_color5 = list_of_events[i][3]
+        elif day_1_count == 6:
+            day_1_time6 = list_of_events[i][1]
+            day_1_event6 = list_of_events[i][2]
+            day_1_color6 = list_of_events[i][3]
+        elif day_1_count == 7:
+            day_1_time7 = list_of_events[i][1]
+            day_1_event7 = list_of_events[i][2]
+            day_1_color7 = list_of_events[i][3]
+        elif day_1_count == 8:
+            day_1_time8 = list_of_events[i][1]
+            day_1_event8 = list_of_events[i][2]
+            day_1_color8 = list_of_events[i][3]
         day_1_count = day_1_count+1
     if day_2_num == list_of_events[i][0]:
         if day_2_count == 1:
@@ -383,6 +460,18 @@ for each in list_of_events:
             day_2_time5 = list_of_events[i][1]
             day_2_event5 = list_of_events[i][2]
             day_2_color5 = list_of_events[i][3]
+        elif day_2_count == 6:
+            day_2_time6 = list_of_events[i][1]
+            day_2_event6 = list_of_events[i][2]
+            day_2_color6 = list_of_events[i][3]
+        elif day_2_count == 7:
+            day_2_time7 = list_of_events[i][1]
+            day_2_event7 = list_of_events[i][2]
+            day_2_color7 = list_of_events[i][3]
+        elif day_2_count == 8:
+            day_2_time8 = list_of_events[i][1]
+            day_2_event8 = list_of_events[i][2]
+            day_2_color8 = list_of_events[i][3]
         day_2_count = day_2_count+1
     if day_3_num == list_of_events[i][0]:
         if day_3_count == 1:
@@ -405,6 +494,18 @@ for each in list_of_events:
             day_3_time5 = list_of_events[i][1]
             day_3_event5 = list_of_events[i][2]
             day_3_color5 = list_of_events[i][3]
+        elif day_3_count == 6:
+            day_3_time6 = list_of_events[i][1]
+            day_3_event6 = list_of_events[i][2]
+            day_3_color6 = list_of_events[i][3]
+        elif day_3_count == 7:
+            day_3_time7 = list_of_events[i][1]
+            day_3_event7 = list_of_events[i][2]
+            day_3_color7 = list_of_events[i][3]
+        elif day_3_count == 8:
+            day_3_time8 = list_of_events[i][1]
+            day_3_event8 = list_of_events[i][2]
+            day_3_color8 = list_of_events[i][3]
         day_3_count = day_3_count+1
     if day_4_num == list_of_events[i][0]:
         if day_4_count == 1:
@@ -427,10 +528,20 @@ for each in list_of_events:
             day_4_time5 = list_of_events[i][1]
             day_4_event5 = list_of_events[i][2]
             day_4_color5 = list_of_events[i][3]
+        elif day_4_count == 6:
+            day_4_time6 = list_of_events[i][1]
+            day_4_event6 = list_of_events[i][2]
+            day_4_color6 = list_of_events[i][3]
+        elif day_4_count == 7:
+            day_4_time7 = list_of_events[i][1]
+            day_4_event7 = list_of_events[i][2]
+            day_4_color7 = list_of_events[i][3]
+        elif day_4_count == 8:
+            day_4_time8 = list_of_events[i][1]
+            day_4_event8 = list_of_events[i][2]
+            day_4_color8 = list_of_events[i][3]
         day_4_count = day_4_count+1
     if day_5_num == list_of_events[i][0]:
-        print("day5 count: ",day_5_count)
-        print("this is list_of_events[i][2]: ",list_of_events[i][2])
         if day_5_count == 1:
             day_5_time1 = list_of_events[i][1]
             day_5_event1 = list_of_events[i][2]
@@ -451,6 +562,18 @@ for each in list_of_events:
             day_5_time5 = list_of_events[i][1]
             day_5_event5 = list_of_events[i][2]
             day_5_color5 = list_of_events[i][3]
+        elif day_5_count == 6:
+            day_5_time6 = list_of_events[i][1]
+            day_5_event6 = list_of_events[i][2]
+            day_5_color6 = list_of_events[i][3]
+        elif day_5_count == 7:
+            day_5_time7 = list_of_events[i][1]
+            day_5_event7 = list_of_events[i][2]
+            day_5_color7 = list_of_events[i][3]
+        elif day_5_count == 8:
+            day_5_time8 = list_of_events[i][1]
+            day_5_event8 = list_of_events[i][2]
+            day_5_color8 = list_of_events[i][3]
         day_5_count = day_5_count+1
     if day_6_num == list_of_events[i][0]:
         if day_6_count == 1:
@@ -473,6 +596,18 @@ for each in list_of_events:
             day_6_time5 = list_of_events[i][1]
             day_6_event5 = list_of_events[i][2]
             day_6_color5 = list_of_events[i][3]
+        elif day_6_count == 6:
+            day_6_time6 = list_of_events[i][1]
+            day_6_event6 = list_of_events[i][2]
+            day_6_color6 = list_of_events[i][3]
+        elif day_6_count == 7:
+            day_6_time7 = list_of_events[i][1]
+            day_6_event7 = list_of_events[i][2]
+            day_6_color7 = list_of_events[i][3]
+        elif day_6_count == 8:
+            day_6_time8 = list_of_events[i][1]
+            day_6_event8 = list_of_events[i][2]
+            day_6_color8 = list_of_events[i][3]
         day_6_count = day_6_count+1
     if day_7_num == list_of_events[i][0]:
         if day_7_count == 1:
@@ -495,6 +630,18 @@ for each in list_of_events:
             day_7_time5 = list_of_events[i][1]
             day_7_event5 = list_of_events[i][2]
             day_7_color5 = list_of_events[i][3]
+        elif day_7_count == 6:
+            day_7_time6 = list_of_events[i][1]
+            day_7_event6 = list_of_events[i][2]
+            day_7_color6 = list_of_events[i][3]
+        elif day_7_count == 7:
+            day_7_time7 = list_of_events[i][1]
+            day_7_event7 = list_of_events[i][2]
+            day_7_color7 = list_of_events[i][3]
+        elif day_7_count == 8:
+            day_7_time8 = list_of_events[i][1]
+            day_7_event8 = list_of_events[i][2]
+            day_7_color8 = list_of_events[i][3]
         day_7_count = day_7_count+1
     i= i+1
 
@@ -503,7 +650,10 @@ times = [
         [day_1_time2,day_2_time2,day_3_time2,day_4_time2,day_5_time2,day_6_time2,day_7_time2],
         [day_1_time3,day_2_time3,day_3_time3,day_4_time3,day_5_time3,day_6_time3,day_7_time3],
         [day_1_time4,day_2_time4,day_3_time4,day_4_time4,day_5_time4,day_6_time4,day_7_time4],
-        [day_1_time5,day_2_time5,day_3_time5,day_4_time5,day_5_time5,day_6_time5,day_7_time5]
+        [day_1_time5,day_2_time5,day_3_time5,day_4_time5,day_5_time5,day_6_time5,day_7_time5],
+        [day_1_time6,day_2_time6,day_3_time6,day_4_time6,day_5_time6,day_6_time6,day_7_time6],
+        [day_1_time7,day_2_time7,day_3_time7,day_4_time7,day_5_time7,day_6_time7,day_7_time7],
+        [day_1_time8,day_2_time8,day_3_time8,day_4_time8,day_5_time8,day_6_time8,day_7_time8]
 ]
 
 events = [
@@ -511,7 +661,10 @@ events = [
     [day_1_event2,day_2_event2, day_3_event2, day_4_event2, day_5_event2, day_6_event2, day_7_event2],
     [day_1_event3,day_2_event3, day_3_event3, day_4_event3, day_5_event3, day_6_event3, day_7_event3],
     [day_1_event4,day_2_event4, day_3_event4, day_4_event4, day_5_event4, day_6_event4, day_7_event4],
-    [day_1_event5,day_2_event5, day_3_event5, day_4_event5, day_5_event5, day_6_event5, day_7_event5]
+    [day_1_event5,day_2_event5, day_3_event5, day_4_event5, day_5_event5, day_6_event5, day_7_event5],
+    [day_1_event6,day_2_event6, day_3_event6, day_4_event6, day_5_event6, day_6_event6, day_7_event6],
+    [day_1_event7,day_2_event7, day_3_event7, day_4_event7, day_5_event7, day_6_event7, day_7_event7],
+    [day_1_event8,day_2_event8, day_3_event8, day_4_event8, day_5_event8, day_6_event8, day_7_event8]
 ]
 
 colors = [
@@ -519,14 +672,17 @@ colors = [
     [day_1_color2,day_2_color2, day_3_color2, day_4_color2, day_5_color2, day_6_color2, day_7_color2],
     [day_1_color3,day_2_color3, day_3_color3, day_4_color3, day_5_color3, day_6_color3, day_7_color3],
     [day_1_color4,day_2_color4, day_3_color4, day_4_color4, day_5_color4, day_6_color4, day_7_color4],
-    [day_1_color5,day_2_color5, day_3_color5, day_4_color5, day_5_color5, day_6_color5, day_7_color5]
+    [day_1_color5,day_2_color5, day_3_color5, day_4_color5, day_5_color5, day_6_color5, day_7_color5],
+    [day_1_color6,day_2_color6, day_3_color6, day_4_color6, day_5_color6, day_6_color6, day_7_color6],
+    [day_1_color7,day_2_color7, day_3_color7, day_4_color7, day_5_color7, day_6_color7, day_7_color7],
+    [day_1_color8,day_2_color8, day_3_color8, day_4_color8, day_5_color8, day_6_color8, day_7_color8]
 ]
 
     
 hw = get_homework_response()
 
 # times = make_calendar_vars(list_of_events)
-print(f"\n\nthis is list_of_events: {list_of_events} \n\n\n\nthis is events: {events}\n\n\n this is times: {times}\n\n\n this is dates: {dates}\n\n\n this is colors: {colors}\n\n\nthis is homework: {hw}")
+# print(f"\n\nthis is list_of_events: {list_of_events} \n\n\n\nthis is events: {events}\n\n\n this is times: {times}\n\n\n this is dates: {dates}\n\n\n this is colors: {colors}\n\n\nthis is homework: {hw}")
 dc.print_calendar(times, events, dates, colors, hw)
 x = os.get_terminal_size()
 columns = int(x[0])
