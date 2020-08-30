@@ -27,6 +27,7 @@ CLASSES_CALENDAR_COLOR = "#FFFFFF"
 BIRTHDAY_CALENDAR_COLOR = "#FFC0CB"
 HOME_CALENDAR_COLOR = "#6B8E23"
 HOLIDAY_CALENDAR_COLOR = "#00FF00" 
+NORMAL_CALENDAR_COLOR = "#FFA500"
 DATE_COLOR = "#ffcd3c"
 BOARD_COLOR = "#404040"
 CRYPTO_COLOR = "#ffcd3c"
@@ -105,7 +106,8 @@ def get_api_response():
     home_cal = Calendar (response_from_api ("d47.org_l77q084fo5hdumaucnoqmu7ifs@group.calendar.google.com", service, max_time, now, color="#FF6347"), color=HOME_CALENDAR_COLOR)
     birthdays_cal = Calendar (response_from_api ("93ree9e9e3piqpimt1uiu596tg@group.calendar.google.com", service, max_time, now, color="#FF6347"), color = BIRTHDAY_CALENDAR_COLOR)
     holiday_cal = Calendar (response_from_api ("en.usa#holiday@group.v.calendar.google.com", service, max_time, now, color="#FF6347"), color = HOLIDAY_CALENDAR_COLOR)
-    list_of_cals = [birthdays_cal, classes, home_cal, holiday_cal]
+    normal_cal = Calendar (response_from_api ("n12ih9qm9q8tfae88lhdu8gg24@group.calendar.google.com", service, max_time, now, color="#FF6347"), color = NORMAL_CALENDAR_COLOR)
+    list_of_cals = [birthdays_cal, classes, normal_cal, home_cal, holiday_cal]
     return(list_of_cals)
 
 def get_homework_response():
