@@ -5,7 +5,8 @@ from stringcolor import *
 WEATHER = "weather"
 WEATHER_COLOR = "#FF000"
 SPACE = " "
-OVERFLOW = "OVERFLOW"
+global OVERFLOW
+OVERFLOW = ["","","","","","","","","","",]
 OVERFLOW_ = "check calendar"
 OVERFLOW_COLOR = "#FFCC00"
 overflow_flag=False
@@ -75,13 +76,13 @@ def print_calendar(times, events, dates, colors, homework):
         if COUNT == 16:
             print(f"    |   {cs(times[7][0].ljust(spacing-1)[0:spacing-1], colors[7][0])}|   {cs(times[7][1].ljust(17)[0:spacing-1], colors[7][1])}|   {cs(times[7][2].ljust(17)[0:spacing-1], colors[7][2])}|   {cs(times[7][3].ljust(17)[0:spacing-1], colors[7][3])}|   {cs(times[7][4].ljust(17)[0:spacing-1], colors[7][4])}|   {cs(times[7][5].ljust(17)[0:spacing-1], colors[7][5])}|   {cs(times[7][6].ljust(17)[0:spacing-1], colors[7][6])}|  {cs(homework[7][26:].ljust(22), WEATHER_COLOR)}|")
             print(f"    |   {cs(events[7][0].ljust(spacing-1)[0:spacing-1], colors[7][0])}|   {cs(events[7][1].ljust(17)[0:spacing-1], colors[7][1])}|   {cs(events[7][2].ljust(17)[0:spacing-1], colors[7][2])}|   {cs(events[7][3].ljust(17)[0:spacing-1], colors[7][3])}|   {cs(events[7][4].ljust(17)[0:spacing-1], colors[7][4])}|   {cs(events[7][5].ljust(17)[0:spacing-1], colors[7][5])}|   {cs(events[7][6].ljust(17)[0:spacing-1], colors[7][6])}|  {cs(homework[7][:10].ljust(22), WEATHER_COLOR)}|")
-            overflow_flag="True"
-        if overflow_flag == "True":
-            if overflow_flag != "off":
-                print_empty_line(spacing)
-                print(f"    |   {cs(OVERFLOW.ljust(17)[0:spacing-1], OVERFLOW_COLOR)}|   {cs(OVERFLOW.ljust(17)[0:spacing-1], OVERFLOW_COLOR)}|   {cs(OVERFLOW.ljust(17)[0:spacing-1], OVERFLOW_COLOR)}|   {cs(OVERFLOW.ljust(17)[0:spacing-1], OVERFLOW_COLOR)}|   {cs(OVERFLOW.ljust(17)[0:spacing-1], OVERFLOW_COLOR)}|   {cs(OVERFLOW.ljust(17)[0:spacing-1], OVERFLOW_COLOR)}|   {cs(OVERFLOW.ljust(17)[0:spacing-1], OVERFLOW_COLOR)}|  {cs(homework[7][26:].ljust(22), WEATHER_COLOR)}|")
+        if COUNT == line-25:
+            for i in range(0,7):
+                if len(events[7][i]) > 1:
+                    OVERFLOW[i] = "OVERFLOW"
+            print_empty_line(spacing)
+            print(f"    |   {cs(OVERFLOW[0].ljust(17)[0:spacing-1], OVERFLOW_COLOR)}|   {cs(OVERFLOW[2].ljust(17)[0:spacing-1], OVERFLOW_COLOR)}|   {cs(OVERFLOW[3].ljust(17)[0:spacing-1], OVERFLOW_COLOR)}|   {cs(OVERFLOW[4].ljust(17)[0:spacing-1], OVERFLOW_COLOR)}|   {cs(OVERFLOW[5].ljust(17)[0:spacing-1], OVERFLOW_COLOR)}|   {cs(OVERFLOW[6].ljust(17)[0:spacing-1], OVERFLOW_COLOR)}|   {cs(OVERFLOW[7].ljust(17)[0:spacing-1], OVERFLOW_COLOR)}|  {cs(OVERFLOW[8].ljust(22), OVERFLOW_COLOR)}|")
                 # print(f"    |   {cs(events[7][0].ljust(spacing-1)[0:spacing-1], colors[7][0])}|   {cs(events[7][1].ljust(17)[0:spacing-1], colors[7][1])}|   {cs(events[7][2].ljust(17)[0:spacing-1], colors[7][2])}|   {cs(events[7][3].ljust(17)[0:spacing-1], colors[7][3])}|   {cs(events[7][4].ljust(17)[0:spacing-1], colors[7][4])}|   {cs(events[7][5].ljust(17)[0:spacing-1], colors[7][5])}|   FFCC00|  {cs(homework[7][:10].ljust(22), WEATHER_COLOR)}|")
-                overflow_flag = "off"
         COUNT +=1
     print_bar(columns)
     # print("\t\t\t\t\t\t color codes here")

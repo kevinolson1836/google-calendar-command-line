@@ -689,4 +689,4 @@ dc.print_calendar(times, events, dates, colors, hw)
 x = os.get_terminal_size()
 columns = int(x[0])
 columns_half = columns/2
-print(f"\t\t\t\t\t\t COLOR CODES:\t{cs('HOME', HOME_CALENDAR_COLOR).bold().underline()} {cs('HOMEWORK', HOME_WORK_CALENDAR_COLOR).bold().underline()} {cs('BIRTHDAY', BIRTHDAY_CALENDAR_COLOR).bold().underline()} {cs('CLASSES', CLASSES_CALENDAR_COLOR).bold().underline()} {cs('HOLIDAY CALENDAR', HOLIDAY_CALENDAR_COLOR).bold().underline()}")
+print(f"\t\t\t\t\t\t COLOR CODES:\t{cs('HOME', HOME_CALENDAR_COLOR).bold().underline()} {cs('HOMEWORK', HOME_WORK_CALENDAR_COLOR).bold().underline()} {cs('BIRTHDAY', BIRTHDAY_CALENDAR_COLOR).bold().underline()} {cs('CLASSES', CLASSES_CALENDAR_COLOR).bold().underline()} {cs('HOLIDAY CALENDAR', HOLIDAY_CALENDAR_COLOR).bold().underline()} {cs('NORMAL CALENDAR', NORMAL_CALENDAR_COLOR).bold().underline()}")
