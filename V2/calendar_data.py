@@ -2,7 +2,6 @@ from __future__ import print_function
 import datetime
 import os.path
 import os
-from rfc3339 import rfc3339
 from datetime import timedelta
 from datetime import date
 from googleapiclient.discovery import build
@@ -60,13 +59,14 @@ class calendar_data:
                 creds.refresh(Request())
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    'credentials.json', SCOPES)
+                    r'C:\Users\santa\OneDrive\Desktop\code\background_img_calendar\credentials.json', SCOPES)
                 creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
             with open('token.json', 'w') as token:
                 token.write(creds.to_json())
 
         service = build('calendar', 'v3', credentials=creds)
+
         
 
 
@@ -81,9 +81,9 @@ class calendar_data:
 
         #time data
         mintime = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-        maxtime = datetime.date.today() + datetime.timedelta(days=num_section)  #math.floor(self.y/4)
-        maxtime = rfc3339(maxtime)
-
+        mintime = datetime.datetime.today().isoformat() + 'Z' # 'Z' indicates UTC time
+        maxtime = datetime.datetime.today() + datetime.timedelta(days=7)
+        maxtime = maxtime.isoformat() + 'Z' # 'Z' indicates UTC time
         #calendars
         birthday_calendar = get_events(service, birthday, mintime, maxtime)
         classes_calendar = get_events(service, classes, mintime, maxtime)
