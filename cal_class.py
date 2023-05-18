@@ -112,15 +112,6 @@ class Calendar:
 
     def gen_date_string(self):
         now = datetime.datetime.utcnow()
-        # print(type(str(now)))
-        # datelist = [
-        #     str(now),
-        #     str(now),
-        #     str(now),
-        #     str(now),
-        #     str(now),
-        #     str(now)
-        # ]
         return_str = self.left_buffer + "║"
         for i in range(self.num_of_cells):
             if(i == 0):

@@ -9,17 +9,19 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 
-tokenPath = r'/home/kevin/code/google-calendar-command-line/V2/token.json'
-credPath = r'/home/kevin/code/google-calendar-command-line/V2/credentials.json'
+tokenPath = r'token.json'
+credPath = r'credentials.json'
+
+birthdayID = ''
+workID = ''
+Normal = ''
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 # If modifying these scopes, delete the file token.json.
 
 
 class Event_handler:
     def __init__(self):
-        self.birthdayID = "93ree9e9e3piqpimt1uiu596tg@group.calendar.google.com"
-        self.workID = "jd68d64fb2t5jr453apkuvkkcs@group.calendar.google.com"
-        self.basicID = "n12ih9qm9q8tfae88lhdu8gg24@group.calendar.google.com"
+
         self.num_of_calendars = 3
 
     def get_num_of_calendars(self):
@@ -64,11 +66,11 @@ class Event_handler:
                 return_list = []
                 for i in range (7):
                     if (i == 0):
-                        if (calID == "93ree9e9e3piqpimt1uiu596tg@group.calendar.google.com" ):
+                        if (calID == birthdayID ):
                             calName = "Birthdays"
-                        if (calID == "jd68d64fb2t5jr453apkuvkkcs@group.calendar.google.com" ):
+                        if (calID == workID ):
                             calName = "Work"
-                        if (calID == "n12ih9qm9q8tfae88lhdu8gg24@group.calendar.google.com" ):
+                        if (calID == Normal ):
                             calName = "Normal"
                         return_list.append(calName)
                     else:
