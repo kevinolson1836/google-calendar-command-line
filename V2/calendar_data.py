@@ -9,41 +9,23 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 
-
+tokenPath = r'/home/kevin/code/google-calendar-command-line/V2/token.json'
+credPath = r'/home/kevin/code/google-calendar-command-line/V2/credentials.json'
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 # If modifying these scopes, delete the file token.json.
 
-birthday = "93ree9e9e3piqpimt1uiu596tg@group.calendar.google.com"
-classes = "4tikr714t89qsjprpeijog83po@group.calendar.google.com"
-homework = "jd68d64fb2t5jr453apkuvkkcs@group.calendar.google.com"
-basic = "n12ih9qm9q8tfae88lhdu8gg24@group.calendar.google.com"
 
-def get_events(service, calid, mintime, maxtime):
-    return_list =[]
-    events_result = service.events().list(calendarId=calid, timeMin=mintime, timeMax=maxtime,
-                                            maxResults=10, singleEvents=True,
-                                            orderBy='startTime').execute()
-    events = events_result.get('items', [])
+class Event_handler:
+    def __init__(self):
+        self.birthdayID = "93ree9e9e3piqpimt1uiu596tg@group.calendar.google.com"
+        self.workID = "jd68d64fb2t5jr453apkuvkkcs@group.calendar.google.com"
+        self.basicID = "n12ih9qm9q8tfae88lhdu8gg24@group.calendar.google.com"
+        self.num_of_calendars = 3
 
-    if not events:
-        pass
-    for event in events:
-        data = []
-        start = event['start'].get('dateTime', event['start'].get('date'))
+    def get_num_of_calendars(self):
+        return(self.num_of_calendars)
 
-        x = [start, event['summary']]
-
-        return_list.append(x)
-    return(return_list)
-
-class calendar_data:
-    def response_from_api(calID, service, max_time, now, color):
-        events_result = service.events().list(calendarId=calID, timeMax=max_time, timeMin=now,
-                                            maxResults=200, singleEvents=True,
-                                            orderBy='startTime').execute()
-        events = events_result.get('items', [])
-
-    def run(data):
+    def main(self,calID):
         """Shows basic usage of the Google Calendar API.
         Prints the start and name of the next 10 events on the user's calendar.
         """
@@ -51,77 +33,73 @@ class calendar_data:
         # The file token.json stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
         # time.
-        if os.path.exists('token.json'):
-            creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+        if os.path.exists(tokenPath):
+            creds = Credentials.from_authorized_user_file(tokenPath, SCOPES)
         # If there are no (valid) credentials available, let the user log in.
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    r'C:\Users\santa\OneDrive\Desktop\code\background_img_calendar\credentials.json', SCOPES)
+                    credPath, SCOPES)
                 creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
-            with open('token.json', 'w') as token:
+            with open(tokenPath, 'w') as token:
                 token.write(creds.to_json())
 
-        service = build('calendar', 'v3', credentials=creds)
+        try:
+            service = build('calendar', 'v3', credentials=creds)
 
-        
+            # Call the Calendar API
+            now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
+            end = datetime.datetime.utcnow() + datetime.timedelta(days=6)  
+            end = end.isoformat() + 'Z'
+            events_result = service.events().list(calendarId=calID, timeMin=now,
+                                                timeMax=end,
+                                                maxResults=10, singleEvents=True,
+                                                orderBy='startTime').execute()
+            events = events_result.get('items', [])
+
+            if not events:
+                return_list = []
+                for i in range (7):
+                    if (i == 0):
+                        if (calID == "93ree9e9e3piqpimt1uiu596tg@group.calendar.google.com" ):
+                            calName = "Birthdays"
+                        if (calID == "jd68d64fb2t5jr453apkuvkkcs@group.calendar.google.com" ):
+                            calName = "Work"
+                        if (calID == "n12ih9qm9q8tfae88lhdu8gg24@group.calendar.google.com" ):
+                            calName = "Normal"
+                        return_list.append(calName)
+                    else:
+                        return_list.append(' ')
+                return(return_list)
+
+            # Prints the start and name of the next 10 events
+            return_list = []
+            for event in events:
+               
+
+                start = event['start'].get('dateTime', event['start'].get('date'))
+                date_1 = datetime.datetime.strptime(start, r'%Y-%m-%d')
+                start = (datetime.datetime.strptime(start, r'%Y-%m-%d')).strftime(r'%m/%d/%y')
+
+           
+                for i in range (7):
+                    if (i == 0):
+                        if (calID == "93ree9e9e3piqpimt1uiu596tg@group.calendar.google.com" ):
+                            calName = "Birthdays"
+                        if (calID == "jd68d64fb2t5jr453apkuvkkcs@group.calendar.google.com" ):
+                            calName = "Work"
+                        if (calID == "n12ih9qm9q8tfae88lhdu8gg24@group.calendar.google.com" ):
+                            calName = "Normal"
+                        return_list.append(calName)
+                    elif (start == str((datetime.datetime.utcnow() + datetime.timedelta(days=i-2    )).strftime(r'%m/%d/%y'))):
+                        return_list.append(event['summary'])
+                    else:
+                        return_list.append(' ')
+                return(return_list)
 
 
-        term_size = os.get_terminal_size()
-        num_section = int(term_size[1])/4
-        dates = []
-        for i in range(int(num_section)):
-            da = datetime.date.today() + timedelta(days=i)
-            dates.append(da.strftime('%Y-%m-%d'))
-        # print(dates)
-        # Call the Calendar API
-
-        #time data
-        mintime = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-        mintime = datetime.datetime.today().isoformat() + 'Z' # 'Z' indicates UTC time
-        maxtime = datetime.datetime.today() + datetime.timedelta(days=7)
-        maxtime = maxtime.isoformat() + 'Z' # 'Z' indicates UTC time
-        #calendars
-        birthday_calendar = get_events(service, birthday, mintime, maxtime)
-        classes_calendar = get_events(service, classes, mintime, maxtime)
-        homework_calendar = get_events(service, homework, mintime, maxtime)
-        basic_calendar = get_events(service, basic, mintime, maxtime)
-
-        max_len = [len(birthday_calendar) , len(classes_calendar), len(homework_calendar), len(basic_calendar)]
-        max_len.sort()
-        all_events = []
-        for i in range(max_len[-1]):
-            try:
-                # print(birthday_calendar[i][0])
-                day = datetime.datetime.today().strftime('%Y-%m-%d')
-                # print(homework_calendar[i])
-                # print("current day: " + day)
-                # print("next day: " + )
-            
-            except:
-                pass
-            try:
-                if (homework_calendar[i][0] == dates[i]):  # compaire dates if its current date, next loop would be current day +1
-                    all_events.append(homework_calendar[i][1])
-            except:
-                pass
-            try:
-                if (homework_calendar[i][0] == dates[i]):
-                    all_events.append(birthday_calendar[i][1])
-            except:
-                pass
-            try:
-                if (homework_calendar[i][0] == dates[i]):
-                    all_events.append(basic_calendar[i][1])
-            except:
-                pass
-            try:
-                if (homework_calendar[i][0] == dates[i]):
-                    all_events.append(classes_calendar[i][1])
-            except:
-                pass
-            all_events.append("endofday")
-        return (all_events)
+        except HttpError as error:
+            print('An error occurred: %s' % error)

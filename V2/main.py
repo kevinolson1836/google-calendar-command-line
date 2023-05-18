@@ -3,36 +3,25 @@ import cal_class as cal
 import os
 import calendar_data as cal_data
 
-calendar = cal.Calendar()
+call_event_handler = cal_data.Event_handler()
+num_of_calendars = call_event_handler.get_num_of_calendars()
 
+birthdayID = "93ree9e9e3piqpimt1uiu596tg@group.calendar.google.com"   
+workID = "jd68d64fb2t5jr453apkuvkkcs@group.calendar.google.com"
+basicID = "n12ih9qm9q8tfae88lhdu8gg24@group.calendar.google.com"
+
+calendar = cal.Calendar(num_of_calendars)
 cal_data = [
-            ["oddddd", "odd", "english", "french", "sexxxxxx","bigmama"],
-            ["it363", "math120", "", "french", "d","bigmama"],
-            ["d", "d", "james bday", "d", "d","bigmama"],
-            ["", "d", "d", "d", "d","d"],
-            ["chore", "clean house", "drive mom", "", "","bigmama"]
+
            ]
 
+# print(call_event_handler.main())
+# cal_data = cal_data.get_all_events()
+# cal_data.append([call_event_handler.main(workID)])
+# cal_data.append([call_event_handler.main(basicID)])
+print(call_event_handler.main(birthdayID))
+cal_data.append([call_event_handler.main(workID)])
+cal_data.append([call_event_handler.main(basicID)])
+cal_data.append([call_event_handler.main(birthdayID)])
 calendar.draw_section(cal_data)
 
-
-
-# events here    
-# calendar_data = cal_data.calendar_data.run("")
-# print(calendar_data, end ='\n\n\n\n')
-
-
-# #  split on 'endofday' then pass the list
-
-# event = []
-# events = []
-# for i in range(len(calendar_data)):
-#     if (calendar_data[i] != 'endofday'):
-#         event.append(calendar_data[i])
-#     else:
-#         events.append(event)
-#         event = []
-
-# # print(events)
-# print("drwing")
-# calendar.draw_section(events)

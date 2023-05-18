@@ -44,14 +44,14 @@ usefull chars just for copy paste
 
 
 class Calendar:
-    def __init__(self):
+    def __init__(self, num_of_calendars):
         colorama.init()
 
         #number of sections (number of calendars to display) 
-        self.num_of_calendars = 4   
+        self.num_of_calendars = num_of_calendars
 
         # number of cells
-        self.num_of_cells = 6
+        self.num_of_cells = 7
 
         # grabbing terminal size
         term_size = os.get_terminal_size()
@@ -62,7 +62,7 @@ class Calendar:
         self.cell_height = 5
         
         #gives us a 2 space buffer on the left side change the number to change the buffer 
-        self.left_buffer = " "*4
+        self.left_buffer = " "*7
         
 
         # CREATES THE TOP BAR BASED ON SCREEN LENGTH AND CELL SIZE 
@@ -82,13 +82,14 @@ class Calendar:
         self.bottom_bar =  self.gen_bottom_bar()
 
         # CREATES THE DATE BASED ON SCREEN LENGTH AND CELL SIZE 
-        self.cell_date =  "    ║   2/2/2023   ║   2/3/2023   ║   2/4/2023   ║   2/5/2023   ║   2/6/2023   ║   2/7/2023   ║   2/8/2023   ║   2/9/2023   ║"
+        self.dates = self.gen_date_string() 
+
 
 
     def gen_top_bar(self):
         # start of conner
         return_str = self.left_buffer + "╔"
-        
+                
         #makes the cells
         for i in range(self.num_of_cells): 
             return_str = return_str + "═" *(self.cell_size-2)
@@ -109,6 +110,24 @@ class Calendar:
 
         return(return_str)
 
+    def gen_date_string(self):
+        now = datetime.datetime.utcnow()
+        # print(type(str(now)))
+        # datelist = [
+        #     str(now),
+        #     str(now),
+        #     str(now),
+        #     str(now),
+        #     str(now),
+        #     str(now)
+        # ]
+        return_str = self.left_buffer + "║"
+        for i in range(self.num_of_cells):
+            if(i == 0):
+                return_str = return_str + "Calendar Name".center(self.cell_size-2) + "║"
+            else:     
+                return_str = return_str + str((now + datetime.timedelta(days=i-2)).strftime(r'%m/%d/%y')).center(self.cell_size-2) + "║"
+        return(return_str)
 
     def gen_bottom_bar(self):
             # start of conner
@@ -180,14 +199,14 @@ class Calendar:
             print(self.top_bar)
 
             #Date section
-            # print(self.cell_side) 
-            # print(self.cell_date)  
-            # print(self.cell_end)
+            print(self.dates) 
+            print(self.cell_end)
             
+            # print("f", end = '')
             # Calendar data cells
             for i in range(self.num_of_calendars):
                 print(self.cell_side)
-                print(self.text_to_(text))
+                print(self.text_to_(text[i]))
                 print(self.cell_side)
                 if(i != self.num_of_calendars-1):
                     print(self.cell_end)
