@@ -9,12 +9,14 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 
-tokenPath = r'token.json'
-credPath = r'credentials.json'
+tokenPath = r'/home/kevin/code/google-calendar-command-line/token.json'
+credPath = r'/home/kevin/code/google-calendar-command-line/credentials.json'
 
-birthdayID = ''
-workID = ''
-Normal = ''
+birthdayID = "93ree9e9e3piqpimt1uiu596tg@group.calendar.google.com"
+workID = "jd68d64fb2t5jr453apkuvkkcs@group.calendar.google.com"
+Normal = "kevin.olson1836@gmail.com"
+#Normal = "n12ih9qm9q8tfae88lhdu8gg24@group.calendar.google.com"
+
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 # If modifying these scopes, delete the file token.json.
 
@@ -93,10 +95,10 @@ class Event_handler:
                             calName = "Birthdays"
                         if (calID == "jd68d64fb2t5jr453apkuvkkcs@group.calendar.google.com" ):
                             calName = "Work"
-                        if (calID == "n12ih9qm9q8tfae88lhdu8gg24@group.calendar.google.com" ):
+                        if (calID == "kevin.olson1836@gmail.com" ):
                             calName = "Normal"
                         return_list.append(calName)
-                    elif (start == str((datetime.datetime.utcnow() + datetime.timedelta(days=i-2    )).strftime(r'%m/%d/%y'))):
+                    elif (start == str((datetime.datetime.utcnow() + datetime.timedelta(days=i-1    )).strftime(r'%m/%d/%y'))):
                         return_list.append(event['summary'])
                     else:
                         return_list.append(' ')

@@ -117,8 +117,7 @@ class Calendar:
             if(i == 0):
                 return_str = return_str + "Calendar Name".center(self.cell_size-2) + "║"
             else:     
-                # possible issue
-                return_str = return_str + str((now + datetime.timedelta(days=i-1)).strftime(r'%m/%d/%y')).center(self.cell_size-2) + "║"
+                return_str = return_str + str((now + datetime.timedelta(days=i-2)).strftime(r'%m/%d/%y')).center(self.cell_size-2) + "║"
         return(return_str)
 
     def gen_bottom_bar(self):

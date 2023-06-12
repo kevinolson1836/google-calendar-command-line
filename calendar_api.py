@@ -21,7 +21,7 @@ import draw_cal as dc
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
-PATH = '/home/kevin/code/projects/google-calendar-command-line/credentials.json'
+PATH = 'credentials.json'
 HOME_WORK_CALENDAR_COLOR = "#FF0000"
 CLASSES_CALENDAR_COLOR = "#FFFFFF"
 BIRTHDAY_CALENDAR_COLOR = "#FFC0CB"
